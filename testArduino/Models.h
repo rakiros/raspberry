@@ -27,7 +27,7 @@ struct StatusData {
 
 // Encode the SensorData object to JSON
 String encodeSensorData(SensorData sensorData);
-
+void sendSensorData(SensorData sensorData);
 // Decode the JSON data to a SensorData object
 SensorData decodeSensorData(String jsonData);
 
@@ -35,6 +35,6 @@ SensorData decodeSensorData(String jsonData);
 String encodeStatusData(StatusData statusData);
 
 // Decode the JSON data to a StatusData object
-StatusData decodeStatusData(String jsonData);
+StatusData decodeStatusData(const char* jsonData);
 
 #endif

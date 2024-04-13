@@ -92,16 +92,20 @@ try:
     while True:
         time.sleep(0.5)
         timestamp = time.time()
-        statusData = StatusData(1234, 1, 1, 0, 0, 0)
+        statusData = StatusData(1234, 1, 1, 0, 0, str(int(time.time())))
+        # print(statusData.timestamp)
         jsonStr = "<" + statusData.toJsonStr() + ">"
-        # print(jsonStr)
+        # print(statusData.toJson())
         ser.write(jsonStr.encode('utf-8'))
         time.sleep(0.5)
         while ser.in_waiting <= 0:
             time.sleep(0.01)
         response = ser.readline().decode('utf-8').rstrip()
-        sensorData = SensorData.fromJson(response)
-        print(response)
+        try:
+            sensorData = SensorData.fromJson(response)
+            print(sensorData.toJson())
+        except:
+            print(response)
 except KeyboardInterrupt:
     print('Serial closed!')
     ser.close()

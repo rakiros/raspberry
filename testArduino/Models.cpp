@@ -16,6 +16,20 @@ DynamicJsonDocument json(1024);
   return jsonStr;
 }
 
+// Encode the SensorData object to JSON
+void sendSensorData(SensorData sensorData) {
+DynamicJsonDocument json(1024);
+  json["l"] = sensorData.waterLevel;
+  json["wT"] = sensorData.waterTemperature;
+  json["aT"] = sensorData.ambTemperature;
+  json["aH"] = sensorData.ambHumidity;
+  json["sH"] = sensorData.soilHumidity;
+  json["tds"] = sensorData.tds;
+  json["ph"] = sensorData.ph;
+  json["t"] = sensorData.timestamp;
+  serializeJson(json, Serial);
+}
+
 // Decode the JSON data to a SensorData object
 SensorData decodeSensorData(String jsonData) {
 DynamicJsonDocument json(1024);
@@ -47,7 +61,7 @@ DynamicJsonDocument json(1024);
 }
 
 // Decode the JSON data to a StatusData object
-StatusData decodeStatusData(String jsonData) {
+StatusData decodeStatusData(const char* jsonData) {
 DynamicJsonDocument json(1024);
   deserializeJson(json, jsonData);
   StatusData statusData;
@@ -56,6 +70,11 @@ DynamicJsonDocument json(1024);
   statusData.fan = json["f"];
   statusData.humidifier = json["h"];
   statusData.pump = json["p"];
-  statusData.serverTimestamp = json["t"];
+  const char* datetime = json["t"];
+  // String str_timestamp_lifts = datetime;
+  // str_timestamp_lifts.remove(10);
+  // long str_timestamp_lifts_toint = str_timestamp_lifts.toInt();
+  // statusData.serverTimestamp = str_timestamp_lifts_toint;
+  statusData.serverTimestamp = atol(datetime);
   return statusData;
 }
